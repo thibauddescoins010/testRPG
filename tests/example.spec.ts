@@ -16,3 +16,9 @@ test('get started link', async ({ page }) => {
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
+
+test('homepage has title and Start button', async ({ page }) => {
+  await page.goto('https://test-rpg.vercel.app/play');
+  await expect(page.getByRole('heading', { name: 'TestRPG' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start!' })).toBeVisible();
+});
