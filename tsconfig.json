@@ -7,6 +7,8 @@
       "resolveJsonModule": true,
       "noEmit": true,
       "types": ["node", "@playwright/test"]
-    }
+    },
+    "include": ["tests/**/*.ts", "pages/**/*.ts", "playwright.config.ts"],
+    "exclude": ["node_modules"]
   }
   
