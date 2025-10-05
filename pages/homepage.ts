@@ -1,5 +1,6 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { assertVisible } from '../utils/assertions';
+import { escapeRegExp } from '../utils/strings';
 
 export class HomePage {
   readonly page: Page;
@@ -65,4 +66,42 @@ export class HomePage {
     await this.openApp();
     await this.assertHomePageLocatorsVisible();
   }
+
+  statProgressBar(stat: string, value?: number): Locator {
+    const statRe =
+      value === undefined
+        ? new RegExp(`^${escapeRegExp(stat)}\\s*\\d+$`)
+        : new RegExp(`^${escapeRegExp(stat)}\\s*${value}$`);
+
+    return this.page
+      .locator('div')
+      .filter({ hasText: statRe })
+      .getByRole('progressbar');
+    }
+
+  async assertStatVisible(stat: string, value?: number) {
+  const statBar = this.statProgressBar(stat, value);
+
+  try {
+    await expect(statBar).toBeVisible();
+    console.log(`✅ Stat "${stat}"${value !== undefined ? ` (${value})` : ''} is visible`);
+  } catch (error) {
+    throw new Error(`❌ Stat "${stat}"${value !== undefined ? ` (${value})` : ''} not visible or missing: ${error}`);
+  }
+}
+
+async verifyOrSelectBuild(build: string, change: boolean = false) {
+  if (change) {
+    // Open the dropdown
+    await this.buildDropdown.click();
+
+    // Click the desired option
+    await this.page.getByRole('option', { name: build }).click();
+  }
+
+  // Verify that the combobox displays the correct build
+  await expect(this.buildDropdown).toHaveText(build);
+}
+
+
 }
