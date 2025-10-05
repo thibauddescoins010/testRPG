@@ -22,6 +22,7 @@ export class HomePage {
   readonly emailRequiredErrorMessage: Locator;
   readonly passwordRequiredErrorMessage: Locator;
   readonly logOutButton: Locator;
+  readonly characterNameErrorMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -43,6 +44,7 @@ export class HomePage {
     this.emailRequiredErrorMessage = page.getByText('EmailRequired');
     this.passwordRequiredErrorMessage = page.getByText('PasswordRequired');
     this.logOutButton = page.getByTestId('logout-button');
+    this.characterNameErrorMessage = page.getByText('Name must be at least 3');
   }
 
   async openApp() {
@@ -150,5 +152,16 @@ async loginWithCredentials(email: string, password: string) {
   await this.assertHomePageLocatorsVisibleAfterLogin();
 }
 
+async tryStartWithoutName() {
+  await this.startButton.click();
+  await assertVisible([
+    this.characterNameErrorMessage,
+  ])
+}
+
+async createCharacter(name: string) {
+  await this.nameInput.fill(name);
+  await this.startButton.click();
+}
 
 }
