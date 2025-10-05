@@ -1,6 +1,8 @@
 import { test } from '@playwright/test';
 import { HomePage } from '../pages/homepage';
 
+
+test.describe('Smoke Tests', () =>{
 test('homepage has correct locators and Start button', async ({ page }) => {
   const home = new HomePage(page);
   await home.openAppAndCheckHomePage();
@@ -27,4 +29,6 @@ test('login flow – invalid + valid login attempts', async ({ page }) => {
 
   // Positive flow: fill valid credentials
   await home.loginWithCredentials('test@example.com', 'Password123');
+});
+
 });
