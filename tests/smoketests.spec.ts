@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
 import { HomePage } from '../pages/homepage';
 import { GamePage } from '../pages/gamepage';
+import { EXPECTED_STATS } from '../utils/test-data';
 
 
 test.describe('Smoke Tests', () =>{
@@ -11,13 +12,10 @@ test('homepage has correct locators and Start button', async ({ page }) => {
 
 test('opens on Thief build with correct default stats', async ({ page }) => {
   const home = new HomePage(page);
+  const build = 'Thief'
   await home.openAppAndCheckHomePage();
-  await home.verifyOrSelectBuild('Thief');
-  // Assert stat progress bars are visible with the right values
-  await home.assertStatVisible('Strength', 1);
-  await home.assertStatVisible('Agility', 6);
-  await home.assertStatVisible('Wisdom', 2);
-  await home.assertStatVisible('Magic', 1);
+  await home.verifyOrSelectBuild(build);
+  await home.assertStats(EXPECTED_STATS[build]);
 });
 
 test('login flow – invalid + valid login attempts', async ({ page }) => {
