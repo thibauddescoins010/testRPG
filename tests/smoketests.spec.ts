@@ -16,3 +16,15 @@ test('opens on Thief build with correct default stats', async ({ page }) => {
   await home.assertStatVisible('Wisdom', 2);
   await home.assertStatVisible('Magic', 1);
 });
+
+test('login flow – invalid + valid login attempts', async ({ page }) => {
+  const home = new HomePage(page);
+  await home.openAppAndCheckHomePage();
+  await home.openLoginModal();
+
+  // Negative flow: submit without credentials
+  await home.tryLoginWithoutCredentials();
+
+  // Positive flow: fill valid credentials
+  await home.loginWithCredentials('test@example.com', 'Password123');
+});
