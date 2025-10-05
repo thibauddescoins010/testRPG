@@ -20,6 +20,12 @@ export class HomePage {
   readonly brigadierBuild: Locator;
   readonly startButton: Locator;
   readonly loginButton: Locator;
+  readonly loginDialog: Locator;
+  readonly loginEmailField: Locator;
+  readonly loginPasswordField: Locator;
+  readonly emailRequiredErrorMessage: Locator;
+  readonly passwordRequiredErrorMessage: Locator;
+  readonly logOutButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -39,6 +45,12 @@ export class HomePage {
     this.brigadierBuild = page.getByRole('option', { name: 'Brigadier' });
     this.startButton = page.getByRole('button', { name: 'Start!' });
     this.loginButton = page.getByRole('button', { name: 'Login' });
+    this.loginDialog = page.getByRole('dialog', { name: 'Login to TestRPG' });
+    this.loginEmailField = page.getByRole('textbox', { name: 'Email' });
+    this.loginPasswordField = page.getByRole('textbox', { name: 'Password' });
+    this.emailRequiredErrorMessage = page.getByText('EmailRequired');
+    this.passwordRequiredErrorMessage = page.getByText('PasswordRequired');
+    this.logOutButton = page.getByTestId('logout-button');
   }
 
   async openApp() {
@@ -59,6 +71,23 @@ export class HomePage {
       this.buildDropdown,
       this.startButton,
       this.loginButton,
+    ]);
+  }
+
+  async assertHomePageLocatorsVisibleAfterLogin() {
+    await assertVisible([
+      this.title,
+      this.characterPanel,
+      this.statsTitle,
+      this.strengthTitle,
+      this.agilityTitle,
+      this.wisdomTitle,
+      this.magicTitle,
+      this.levelTitle,
+      this.nameInput,
+      this.buildDropdown,
+      this.startButton,
+      this.logOutButton,
     ]);
   }
 
@@ -101,6 +130,31 @@ async verifyOrSelectBuild(build: string, change: boolean = false) {
 
   // Verify that the combobox displays the correct build
   await expect(this.buildDropdown).toHaveText(build);
+}
+
+async openLoginModal() {
+  await this.loginButton.click();
+  await assertVisible([
+    this.loginDialog,
+    this.loginEmailField,
+    this.loginPasswordField,
+    this.loginButton
+  ]);
+}
+
+async tryLoginWithoutCredentials() {
+  await this.loginButton.click();
+  await assertVisible([
+    this.emailRequiredErrorMessage,
+    this.passwordRequiredErrorMessage
+  ]);
+}
+
+async loginWithCredentials(email: string, password: string) {
+  await this.loginEmailField.fill(email);
+  await this.loginPasswordField.fill(password);
+  await this.loginButton.click();
+  await this.assertHomePageLocatorsVisibleAfterLogin();
 }
 
 
