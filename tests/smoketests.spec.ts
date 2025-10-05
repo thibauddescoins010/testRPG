@@ -30,8 +30,7 @@ test('login flow – invalid + valid login attempts', async ({}) => {
   await home.loginWithCredentials('test@example.com', 'Password123');
 });
 
-test('character creation flow – missing name then valid creation', async ({ page }) => {
-  const game = new GamePage(page);
+test('character creation flow – missing name then valid creation', async ({}) => {
 
   // Negative flow — try to start without entering a name
   await home.tryStartWithoutName();

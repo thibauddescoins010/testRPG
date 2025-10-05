@@ -14,12 +14,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Character creation flows', () =>{
-test('create new Knight and verify stats update before starting', async ({ page }) => {
-  const home = new HomePage(page);
-  const game = new GamePage(page);
+test('create new Knight and verify stats update before starting', async ({}) => {
 
   const build = 'Knight';
-  await home.openAppAndCheckHomePage();
   await home.verifyOrSelectBuild(build, true);
   await home.assertStats(EXPECTED_STATS[build]);
 
@@ -29,12 +26,9 @@ test('create new Knight and verify stats update before starting', async ({ page 
   await home.assertStats(EXPECTED_STATS[build]);
 });
 
-test('create new Mage and verify stats update before starting', async ({ page }) => {
-  const home = new HomePage(page);
-  const game = new GamePage(page);
+test('create new Mage and verify stats update before starting', async ({}) => {
 
   const build = 'Mage';
-  await home.openAppAndCheckHomePage();
   await home.verifyOrSelectBuild(build, true);
   await home.assertStats(EXPECTED_STATS[build]);
 
@@ -44,12 +38,9 @@ test('create new Mage and verify stats update before starting', async ({ page })
   await home.assertStats(EXPECTED_STATS[build]);
 });
 
-test('create new Brigadier and verify stats update before starting', async ({ page }) => {
-  const home = new HomePage(page);
-  const game = new GamePage(page);
+test('create new Brigadier and verify stats update before starting', async ({}) => {
 
   const build = 'Brigadier';
-  await home.openAppAndCheckHomePage();
   await home.verifyOrSelectBuild(build, true);
   await home.assertStats(EXPECTED_STATS[build]);
 
