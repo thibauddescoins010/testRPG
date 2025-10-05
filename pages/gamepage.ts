@@ -1,5 +1,7 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { escapeRegExp } from '../utils/strings';
+import { assertStatsOnPage, buildStatRegex } from '../utils/stats';
+import type { StatName } from './homepage';
 
 export class GamePage{
     readonly page: Page;
@@ -21,4 +23,16 @@ export class GamePage{
 
     await expect(this.characterStats).toHaveText(re);
   }
+
+  statProgressBar(stat: StatName, value?: number): Locator {
+  const statRe = buildStatRegex(stat, value);
+  return this.page
+    .locator(`[data-character-stats="${stat}"]`)
+    .filter({ hasText: statRe })
+    .getByRole('progressbar');
+}
+
+async assertStats(expected: Record<StatName, number>) {
+  await assertStatsOnPage(this.page, expected, (stat, value) => this.statProgressBar(stat, value));
+}
 }

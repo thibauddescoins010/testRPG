@@ -1,6 +1,9 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { assertVisible } from '../utils/assertions';
 import { escapeRegExp } from '../utils/strings';
+import { assertStatsOnPage, buildStatRegex } from '../utils/stats';
+
+export type StatName = 'Strength' | 'Agility' | 'Wisdom' | 'Magic';
 
 export class HomePage {
   readonly page: Page;
@@ -91,27 +94,13 @@ export class HomePage {
     await this.assertHomePageLocatorsVisible();
   }
 
-  statProgressBar(stat: string, value?: number): Locator {
-    const statRe =
-      value === undefined
-        ? new RegExp(`^${escapeRegExp(stat)}\\s*\\d+$`)
-        : new RegExp(`^${escapeRegExp(stat)}\\s*${value}$`);
+  statProgressBar(stat: StatName, value?: number): Locator {
+  const statRe = buildStatRegex(stat, value);
+  return this.page.locator('div').filter({ hasText: statRe }).getByRole('progressbar');
+}
 
-    return this.page
-      .locator('div')
-      .filter({ hasText: statRe })
-      .getByRole('progressbar');
-    }
-
-  async assertStatVisible(stat: string, value?: number) {
-  const statBar = this.statProgressBar(stat, value);
-
-  try {
-    await expect(statBar).toBeVisible();
-    console.log(`✅ Stat "${stat}"${value !== undefined ? ` (${value})` : ''} is visible`);
-  } catch (error) {
-    throw new Error(`❌ Stat "${stat}"${value !== undefined ? ` (${value})` : ''} not visible or missing: ${error}`);
-  }
+async assertStats(expected: Record<StatName, number>) {
+  await assertStatsOnPage(this.page, expected, (stat, value) => this.statProgressBar(stat, value));
 }
 
 async verifyOrSelectBuild(build: string, change: boolean = false) {
