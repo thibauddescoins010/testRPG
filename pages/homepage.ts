@@ -13,6 +13,10 @@ export class HomePage {
   readonly levelTitle: Locator;
   readonly nameInput: Locator;
   readonly buildDropdown: Locator;
+  readonly thiefBuild: Locator;
+  readonly knightBuild: Locator;
+  readonly mageBuild:Locator;
+  readonly brigadierBuild: Locator;
   readonly startButton: Locator;
   readonly loginButton: Locator;
 
@@ -28,6 +32,10 @@ export class HomePage {
     this.levelTitle = page.getByText('Level', { exact: true });
     this.nameInput = page.getByRole('textbox', { name: 'Character name' });
     this.buildDropdown = page.getByRole('combobox', { name: 'Build' });
+    this.thiefBuild = page.getByRole('option', { name: 'Thief' });
+    this.knightBuild = page.getByRole('option', { name: 'Knight' });
+    this.mageBuild = page.getByRole('option', { name: 'Mage' });
+    this.brigadierBuild = page.getByRole('option', { name: 'Brigadier' });
     this.startButton = page.getByRole('button', { name: 'Start!' });
     this.loginButton = page.getByRole('button', { name: 'Login' });
   }
